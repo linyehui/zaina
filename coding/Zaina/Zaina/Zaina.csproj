@@ -72,10 +72,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AboutWindow.cs" />
-    <Compile Include="define.cs" />
-    <Compile Include="l10n.cs" />
-    <Compile Include="MainWindow.cs" />
+    <Compile Include="UI\AboutWindow.cs" />
+    <Compile Include="UI\define.cs" />
+    <Compile Include="UI\l10n.cs" />
+    <Compile Include="UI\LocateWindow.cs" />
+    <Compile Include="UI\MainWindow.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -87,6 +88,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Service\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
   <ProjectExtensions>

@@ -17,7 +17,7 @@ namespace Zaina
         PictureBox banner = new PictureBox();
         ToolBar toolbar = new ToolBar();
         ScrollableControl scrollPanel = new ScrollableControl();
-        Button btnWhere = new Button();
+        Button btnLocate = new Button();
         Button btnHistory = new Button();
 
         public MainWindow()
@@ -72,16 +72,17 @@ namespace Zaina
             scrollPanel.Location = new Point(0, banner.Height);
             Controls.Add(scrollPanel);
 
-            btnWhere.Text = "我在哪里";
-            btnWhere.ButtonType = Button.Type.Green;
-            btnWhere.Location = new Point(0, Define.MainButtonsTop);
-            btnWhere.Size = new Size(scrollPanel.Width, Define.MainButtonsHeight);
-            btnWhere.Click += new EventHandler(btnWhere_Click);
-            scrollPanel.Controls.Add(btnWhere);
+            btnLocate.Text = L10n.BtnLocate;
+            btnLocate.ButtonType = Button.Type.Green;
+            btnLocate.Location = new Point(0, Define.MainButtonsTop);
+            btnLocate.Size = new Size(scrollPanel.Width, Define.MainButtonsHeight);
+            btnLocate.Click += new EventHandler(btnWhere_Click);
+            scrollPanel.Controls.Add(btnLocate);
 
-            btnHistory.Text = "我去过哪些地方";
+            btnHistory.Text = L10n.BtnHistory;
             btnHistory.ButtonType = Button.Type.Default;
-            btnHistory.Location = new Point(0, btnWhere.Location.Y + btnWhere.Size.Height + Define.MainButtonsSpace);
+            btnHistory.ForeColor = Color.Black;
+            btnHistory.Location = new Point(0, btnLocate.Location.Y + btnLocate.Size.Height + Define.MainButtonsSpace);
             btnHistory.Size = new Size(scrollPanel.Width, Define.MainButtonsHeight);
             btnHistory.Click += new EventHandler(btnHistory_Click);
             scrollPanel.Controls.Add(btnHistory);
@@ -114,7 +115,7 @@ namespace Zaina
                 case ToolBarButtonIndex.RightTextButton:
                     {
                         AboutWindow about = new AboutWindow();
-                        about.ShowDialog();
+                        about.ShowDialog(this);
                     }
                     break;
             }
@@ -122,9 +123,11 @@ namespace Zaina
 
         void btnWhere_Click(object sender, EventArgs e)
         {
-            WaitDialog.Begin(this);
-            Thread.Sleep(1000);
-            WaitDialog.End();
+            LocateWindow locate = new LocateWindow();
+            locate.ShowDialog(this);
+            //WaitDialog.Begin(this);
+            //Thread.Sleep(1000);
+            //WaitDialog.End();
         }
 
         void btnHistory_Click(object sender, EventArgs e)
