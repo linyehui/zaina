@@ -8,9 +8,10 @@ namespace Zaina
     class Define
     {
         public const int BannerHeight = 133;
-        public const string BannerPath = @"skin\banner.png";
+        public const string BannerPath = @"skin\banner.jpg";
         public const string DefaultMapPath = @"skin\default_map.png";
         public const string AddressTitlePath = @"skin\address_title.png";
+        public const string AboutDetailPath = @"skin\about.png";
 
         public const int MainButtonsHeight = 100;
         public const int MainButtonsSpace = 10;
@@ -23,6 +24,8 @@ namespace Zaina
         public const int AddressTitleHeight = 32;
         public const int AddressHeight = 84;
 
+        // History
+        public const int HistoryListItemHeight = 85;
 
         // 消息ID定义
         private const int LocateGridMenuIdBase = 1000;

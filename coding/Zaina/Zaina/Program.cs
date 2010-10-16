@@ -3,7 +3,6 @@ using System.Linq;
 using System.Collections.Generic;
 using MeizuSDK.Presentation;
 using System.Diagnostics;
-using MeizuSDK.License;
 using System.IO;
 
 namespace Zaina

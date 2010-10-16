@@ -64,6 +64,7 @@
     <Reference Include="mscorlib" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.SQLite, Version=1.0.66.0, Culture=neutral, PublicKeyToken=1fdb50b1b62b4c84, processorArchitecture=MSIL" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
@@ -75,9 +76,13 @@
     <Compile Include="Service\Downloader.cs" />
     <Compile Include="Service\Geolocation.cs" />
     <Compile Include="Service\GStaticMap.cs" />
+    <Compile Include="Service\History.cs" />
+    <Compile Include="Service\LocationItem.cs" />
     <Compile Include="Service\RIL.cs" />
+    <Compile Include="Service\SQLiteQueryBrowser.cs" />
     <Compile Include="UI\AboutWindow.cs" />
     <Compile Include="UI\define.cs" />
+    <Compile Include="UI\HistoryWindow.cs" />
     <Compile Include="UI\l10n.cs" />
     <Compile Include="UI\LocateWindow.cs" />
     <Compile Include="UI\MainWindow.cs" />

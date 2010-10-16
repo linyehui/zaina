@@ -26,5 +26,7 @@ namespace Zaina
 
         public const string MapOptions = "地图选项";
         public const string ReLocate = "重新定位";
+
+        public const string Operator = "操作";
     }
 }

@@ -132,7 +132,8 @@ namespace Zaina
 
         void btnHistory_Click(object sender, EventArgs e)
         {
-
+            HistoryWindow history = new HistoryWindow();
+            history.ShowDialog(this);
         }
     }
 }

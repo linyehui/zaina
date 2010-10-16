@@ -12,7 +12,8 @@ namespace Zaina
     class AboutWindow : Form
     {
         protected ToolBar toolbar = new ToolBar();
-        //protected Label lable = new Label();
+        PictureBox banner = new PictureBox();
+        PictureBox about = new PictureBox();
 
         //private ImagingHelper imgBanner = new ImagingHelper();
 
@@ -28,13 +29,19 @@ namespace Zaina
             toolbar.ButtonClick += new EventHandler<ToolBar.ButtonEventArgs>(toolbar_ButtonClick);
             Controls.Add(toolbar);
 
-            //lable.Text = "林叶辉\r\n林叶辉";
-            //lable.Location = new Point(0, 0);
-            //lable.Size = new Size(Width, 300);
-            //Controls.Add(lable);
+            string path = Path.Combine(Application.StartupPath, Define.BannerPath);
+            banner.LoadFromFile(path);
+            banner.Location = new Point(0, 0);
+            banner.Size = new Size(Screen.ClientWidth, Define.BannerHeight);
+            banner.PaintMode = MeizuSDK.Drawing.PaintMode.Normal;
+            Controls.Add(banner);
 
-            //string path = Path.Combine(Application.StartupPath, Define.BannerPath);
-            //imgBanner.LoadImage(path);
+            path = Path.Combine(Application.StartupPath, Define.AboutDetailPath);
+            about.LoadFromFile(path);
+            about.Location = new Point(0, Define.BannerHeight);
+            about.Size = new Size(Screen.ClientWidth, Height - Define.BannerHeight - ToolBar.HEIGHT);
+            about.PaintMode = MeizuSDK.Drawing.PaintMode.Normal;
+            Controls.Add(about);
 
             base.OnLoad(e);
         }
