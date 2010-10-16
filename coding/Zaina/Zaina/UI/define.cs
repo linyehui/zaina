@@ -26,8 +26,8 @@ namespace Zaina
 
         // 消息ID定义
         private const int LocateGridMenuIdBase = 1000;
-        public const int LocateGridMenuId_ZoonIn = LocateGridMenuIdBase + 1;
-        public const int LocateGridMenuId_ZoonOut = LocateGridMenuIdBase + 2;
+        public const int LocateGridMenuId_ZoomIn = LocateGridMenuIdBase + 1;
+        public const int LocateGridMenuId_ZoomOut = LocateGridMenuIdBase + 2;
         public const int LocateGridMenuId_MapType = LocateGridMenuIdBase + 3;
         public const int LocateGridMenuId_SendSMS = LocateGridMenuIdBase + 4;
     }

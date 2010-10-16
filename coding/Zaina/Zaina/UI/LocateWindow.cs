@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Drawing;
+using System.Threading;
 using MeizuSDK.Presentation;
 using MeizuSDK.Drawing;
 
@@ -12,10 +13,10 @@ namespace Zaina
     class LocateWindow : Form
     {
         ToolBar toolbar = new ToolBar();
-        PictureBox map = new PictureBox();
-        PictureBox Caption = new PictureBox();
-        Label Address = new Label();
-        Boolean ShowSatellite = false;
+        PictureBox picBoxMap = new PictureBox();
+        PictureBox picBoxCaption = new PictureBox();
+        Label labelAddress = new Label();
+        GStaticMap staticMap = new GStaticMap();
 
         private ImageContainer imgContainer = new ImageContainer();
 
@@ -30,6 +31,8 @@ namespace Zaina
 
         private GridMenu menu;
 
+        static AutoResetEvent autoEvent = new AutoResetEvent(false);
+
         public LocateWindow()
         {
             this.AnimationIn = MeizuSDK.Drawing.AnimationType.ScrollRightToLeftPush;
@@ -39,25 +42,25 @@ namespace Zaina
         protected override void OnLoad(EventArgs e)
         {
             string path = Path.Combine(Application.StartupPath, Define.DefaultMapPath);
-            map.LoadFromFile(path);
-            map.Location = new Point(0, 0);
-            map.Size = new Size(Width, Define.MapHeight);
-            map.PaintMode = MeizuSDK.Drawing.PaintMode.Normal;
-            Controls.Add(map);
+            picBoxMap.LoadFromFile(path);
+            picBoxMap.Location = new Point(0, 0);
+            picBoxMap.Size = new Size(Width, Define.MapHeight);
+            picBoxMap.PaintMode = MeizuSDK.Drawing.PaintMode.Normal;
+            Controls.Add(picBoxMap);
 
             path = Path.Combine(Application.StartupPath, Define.AddressTitlePath);
-            Caption.LoadFromFile(path);
-            Caption.Location = new Point(0, Define.MapHeight);
-            Caption.Size = new Size(Width, Define.AddressTitleHeight);
-            Caption.PaintMode = MeizuSDK.Drawing.PaintMode.Normal;
-            Controls.Add(Caption);
+            picBoxCaption.LoadFromFile(path);
+            picBoxCaption.Location = new Point(0, Define.MapHeight);
+            picBoxCaption.Size = new Size(Width, Define.AddressTitleHeight);
+            picBoxCaption.PaintMode = MeizuSDK.Drawing.PaintMode.Normal;
+            Controls.Add(picBoxCaption);
 
-            Address.Text = "珠海市科技创新海岸魅族科技楼";
-            Address.Location = new Point(0, Define.MapHeight + Define.AddressTitleHeight);
-            Address.VScroll = true;
-            Address.HScroll = true;
-            Address.Size = new Size(Width, Define.AddressHeight);
-            Controls.Add(Address);
+            labelAddress.Text = "";
+            labelAddress.Location = new Point(0, Define.MapHeight + Define.AddressTitleHeight);
+            labelAddress.VScroll = true;
+            labelAddress.HScroll = true;
+            labelAddress.Size = new Size(Width, Define.AddressHeight);
+            Controls.Add(labelAddress);
 
             BuildGridMenu();
 
@@ -68,6 +71,8 @@ namespace Zaina
             Controls.Add(toolbar);
 
             base.OnLoad(e);
+
+            Locate();
         }
 
         protected void toolbar_ButtonClick(object sender, ToolBar.ButtonEventArgs e)
@@ -87,10 +92,14 @@ namespace Zaina
                 }
                 else
                 {
-                    menu.Show(HWnd, ToolBar.HEIGHT);
+                    menu.Show(HWnd, ToolBar.HEIGHT - 1);
                 }
 
                 return;
+            }
+            else if (e.Index == ToolBarButtonIndex.RightTextButton)
+            {
+                Locate();
             }
 
             if (menu.IsContinue())
@@ -106,25 +115,19 @@ namespace Zaina
 
             switch (id)
             {
-                case Define.LocateGridMenuId_ZoonIn:
+                case Define.LocateGridMenuId_ZoomIn:
+                    ZoomIn();
                     break;
-                case Define.LocateGridMenuId_ZoonOut:
+                case Define.LocateGridMenuId_ZoomOut:
+                    ZoomOut();
                     break;
                 case Define.LocateGridMenuId_MapType:
-                    {
-                        ShowSatellite = !ShowSatellite;
-                        BuildGridMenu();
-                    }
+                    SwitchMapType();
                     break;
                 case Define.LocateGridMenuId_SendSMS:
                     break;
                 default:
                     break;
-            }
-
-            if (item != null)
-            {
-                MessageBox.Show(string.Format("您点击了ID为[{0}]的菜单项[{1}]。", item.ItemId, item.Text), "GridMenu");
             }
 
             base.OnMzCommand(wParam, lParam);
@@ -150,12 +153,12 @@ namespace Zaina
 
             //menu.ItemClicked += new GridMenuItemClickedEventHandler(menu_ItemClicked);
 
-            GridMenuItem item = new GridMenuItem(Define.LocateGridMenuId_ZoonIn, L10n.MapZoomIn, img1, img1Pressed);
+            GridMenuItem item = new GridMenuItem(Define.LocateGridMenuId_ZoomIn, L10n.MapZoomIn, img1, img1Pressed);
             menu.Items.Add(item);
-            item = new GridMenuItem(Define.LocateGridMenuId_ZoonOut, L10n.MapZoomOut, img2, img2Pressed);
+            item = new GridMenuItem(Define.LocateGridMenuId_ZoomOut, L10n.MapZoomOut, img2, img2Pressed);
             menu.Items.Add(item);
-            
-            if (ShowSatellite)
+
+            if (staticMap.ShowSatellite)
                 item = new GridMenuItem(Define.LocateGridMenuId_MapType, L10n.RoadMap, img3, img3Pressed);
             else
                 item = new GridMenuItem(Define.LocateGridMenuId_MapType, L10n.Satellite, img3, img3Pressed);
@@ -165,6 +168,83 @@ namespace Zaina
             menu.Items.Add(item);
 
             Controls.Add(menu);
+        }
+
+        private void Locate()
+        {
+            WaitDialog.Begin(this);
+            ThreadPool.QueueUserWorkItem(new WaitCallback(MultithreadLocate), autoEvent);
+            autoEvent.WaitOne(Timeout.Infinite, false);
+            WaitDialog.End();
+        }
+
+        private void ZoomIn()
+        {
+            WaitDialog.Begin(this);
+            staticMap.ZoomIn();
+            ThreadPool.QueueUserWorkItem(new WaitCallback(MultithreadRebuildMap), autoEvent);
+            autoEvent.WaitOne(Timeout.Infinite, false);
+            WaitDialog.End();
+        }
+
+        private void ZoomOut()
+        {
+            WaitDialog.Begin(this);
+            staticMap.ZoomOut();
+            ThreadPool.QueueUserWorkItem(new WaitCallback(MultithreadRebuildMap), autoEvent);
+            autoEvent.WaitOne(Timeout.Infinite, false);
+            WaitDialog.End();
+        }
+
+        private void SwitchMapType()
+        {
+            WaitDialog.Begin(this);
+            staticMap.ShowSatellite = !staticMap.ShowSatellite;
+            BuildGridMenu();
+            ThreadPool.QueueUserWorkItem(new WaitCallback(MultithreadRebuildMap), autoEvent);
+            autoEvent.WaitOne(Timeout.Infinite, false);
+            WaitDialog.End();
+        }
+
+        private void MultithreadLocate(object stateInfo)
+        {
+            try
+            {
+                double lat = 0;
+                double lng = 0;
+                string address = "";
+                CGeolocation.locate_GoogleGearsAPI(out lat, out lng);
+                CGeolocation.getLocations_GoogleGearsAPI(lat, lng, out address);
+                labelAddress.Text = address;
+
+                string mapFileName = staticMap.GenMap(lat, lng);
+                picBoxMap.LoadFromFile(mapFileName);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                ((AutoResetEvent)stateInfo).Set();
+            }
+        }
+
+        private void MultithreadRebuildMap(object stateInfo)
+        {
+            try
+            {
+                string mapFileName = staticMap.RebuildMap();
+                picBoxMap.LoadFromFile(mapFileName);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                ((AutoResetEvent)stateInfo).Set();
+            }
         }
     }
 }
