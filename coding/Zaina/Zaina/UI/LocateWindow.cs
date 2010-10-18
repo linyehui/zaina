@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.Drawing;
 using System.Threading;
+using System.Diagnostics;
 using MeizuSDK.Presentation;
 using MeizuSDK.Drawing;
 using MeizuSDK.Core;
@@ -21,14 +22,14 @@ namespace Zaina
 
         private ImageContainer imgContainer = new ImageContainer();
 
-        private ImagingHelper img1;
-        private ImagingHelper img1Pressed;
-        private ImagingHelper img2;
-        private ImagingHelper img2Pressed;
-        private ImagingHelper img3;
-        private ImagingHelper img3Pressed;
-        private ImagingHelper img4;
-        private ImagingHelper img4Pressed;
+        private ImagingHelper imgZoomIn;
+        private ImagingHelper imgZoomOut;
+        private ImagingHelper imgZoom;
+
+        private ImagingHelper imgLocate;
+        private ImagingHelper imgLocatePressed;
+        private ImagingHelper imgSMS;
+        private ImagingHelper imgSMSPressed;
 
         private GridMenu menu;
 
@@ -153,30 +154,41 @@ namespace Zaina
             menu = new GridMenu();
 
             // GridMenu
-            img1 = imgContainer.LoadImageFromMzResV2(MzResV2.Png_Tick, true);
-            img1Pressed = imgContainer.LoadImageFromMzResV2(MzResV2.Png_Tick_Pressed, true);
-            img2 = imgContainer.LoadImageFromMzResV2(MzResV2.Png_Download, true);
-            img2Pressed = imgContainer.LoadImageFromMzResV2(MzResV2.Png_Download_Pressed, true);
-            img3 = imgContainer.LoadImageFromMzResV2(MzResV2.Png_Cancel, true);
-            img3Pressed = imgContainer.LoadImageFromMzResV2(MzResV2.Png_Cancel_Pressed, true);
-            img4 = imgContainer.LoadImageFromMzResV2(MzResV2.Png_Search, true);
-            img4Pressed = imgContainer.LoadImageFromMzResV2(MzResV2.Png_Search_Pressed, true);
+            string path = Path.Combine(Application.StartupPath, Define.ZoomInPath);
+            imgZoomIn = imgContainer.LoadImage(path);
 
+            path = Path.Combine(Application.StartupPath, Define.ZoomPath);
+            imgZoom = imgContainer.LoadImage(path);
+
+            path = Path.Combine(Application.StartupPath, Define.ZoomOutPath);
+            imgZoomOut = imgContainer.LoadImage(path);
+
+            path = Path.Combine(Application.StartupPath, Define.LocatePath);
+            imgLocate = imgContainer.LoadImage(path);
+
+            path = Path.Combine(Application.StartupPath, Define.LocatePressedPath);
+            imgLocatePressed = imgContainer.LoadImage(path);
+
+            path = Path.Combine(Application.StartupPath, Define.SMSPath);
+            imgSMS = imgContainer.LoadImage(path);
+
+            path = Path.Combine(Application.StartupPath, Define.SMSPressedPath);
+            imgSMSPressed = imgContainer.LoadImage(path);
 
             //menu.ItemClicked += new GridMenuItemClickedEventHandler(menu_ItemClicked);
 
-            GridMenuItem item = new GridMenuItem(Define.LocateGridMenuId_ZoomIn, L10n.MapZoomIn, img1, img1Pressed);
+            GridMenuItem item = new GridMenuItem(Define.LocateGridMenuId_ZoomIn, L10n.MapZoomIn, imgZoomIn, imgZoom);
             menu.Items.Add(item);
-            item = new GridMenuItem(Define.LocateGridMenuId_ZoomOut, L10n.MapZoomOut, img2, img2Pressed);
+            item = new GridMenuItem(Define.LocateGridMenuId_ZoomOut, L10n.MapZoomOut, imgZoomOut, imgZoom);
             menu.Items.Add(item);
 
             if (staticMap.ShowSatellite)
-                item = new GridMenuItem(Define.LocateGridMenuId_MapType, L10n.RoadMap, img3, img3Pressed);
+                item = new GridMenuItem(Define.LocateGridMenuId_MapType, L10n.RoadMap, imgLocate, imgLocatePressed);
             else
-                item = new GridMenuItem(Define.LocateGridMenuId_MapType, L10n.Satellite, img3, img3Pressed);
+                item = new GridMenuItem(Define.LocateGridMenuId_MapType, L10n.Satellite, imgLocate, imgLocatePressed);
             menu.Items.Add(item);
 
-            item = new GridMenuItem(Define.LocateGridMenuId_SendSMS, L10n.SendSMS, img4, img4Pressed);
+            item = new GridMenuItem(Define.LocateGridMenuId_SendSMS, L10n.SendSMS, imgSMS, imgSMSPressed);
             menu.Items.Add(item);
 
             Controls.Add(menu);
@@ -254,7 +266,7 @@ namespace Zaina
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
             finally
             {
@@ -271,7 +283,7 @@ namespace Zaina
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
             finally
             {

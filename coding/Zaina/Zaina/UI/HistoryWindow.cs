@@ -242,7 +242,7 @@ namespace Zaina
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
             finally
             {
@@ -280,7 +280,7 @@ namespace Zaina
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
             finally
             {
