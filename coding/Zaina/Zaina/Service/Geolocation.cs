@@ -1,10 +1,10 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using System.Windows.Forms;
 using System.Net;
 using System.IO;
 using System.Text;
+using System.Diagnostics;
 using MeizuSDK.Core;
 
 class CGeolocation
@@ -121,7 +121,7 @@ class CGeolocation
         }
         catch (Exception ex)
         {
-            MessageBox.Show("获取经纬度失败：" + ex.Message);
+            Debug.WriteLine(ex.Message);
             Lat = 0;
             Lng = 0;
             return false;
@@ -180,8 +180,8 @@ class CGeolocation
         }
         catch (Exception ex)
         {
+            Debug.WriteLine(ex.Message);
             address = "";
-            MessageBox.Show("获取地址信息失败：" + ex.Message);
             return false;
         }
     }

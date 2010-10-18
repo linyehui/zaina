@@ -28,5 +28,8 @@ namespace Zaina
         public const string ReLocate = "重新定位";
 
         public const string Operator = "操作";
+
+        public const string LocateFailed = "定位失败，请确认网络正常后重试。";
+        public const string GetAddressFailed = "获取地址信息失败，请确认网络正常后重试。";
     }
 }

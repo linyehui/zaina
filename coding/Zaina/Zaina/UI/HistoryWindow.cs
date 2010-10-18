@@ -15,16 +15,16 @@ namespace Zaina
         ToolBar toolbar = new ToolBar();
         private ImageContainer imgContainer = new ImageContainer();
 
-        private ImagingHelper img1;
-        private ImagingHelper img1Pressed;
-        private ImagingHelper img2;
-        private ImagingHelper img2Pressed;
-        private ImagingHelper img3;
-        private ImagingHelper img3Pressed;
-        private ImagingHelper img4;
-        private ImagingHelper img4Pressed;
+        //private ImagingHelper img1;
+        //private ImagingHelper img1Pressed;
+        //private ImagingHelper img2;
+        //private ImagingHelper img2Pressed;
+        //private ImagingHelper img3;
+        //private ImagingHelper img3Pressed;
+        //private ImagingHelper img4;
+        //private ImagingHelper img4Pressed;
 
-        private GridMenu menu;
+        //private GridMenu menu;
         ListBox list = new ListBox();
 
         static AutoResetEvent autoEvent = new AutoResetEvent(false);
@@ -70,14 +70,14 @@ namespace Zaina
             }
             else if (e.Index == ToolBarButtonIndex.MiddleTextButton)
             {
-                if (menu.IsContinue())
-                {
-                    menu.Close();
-                }
-                else
-                {
-                    menu.Show(HWnd, ToolBar.HEIGHT - 1);
-                }
+                //if (menu.IsContinue())
+                //{
+                //    menu.Close();
+                //}
+                //else
+                //{
+                //    menu.Show(HWnd, ToolBar.HEIGHT - 1);
+                //}
 
                 return;
             }
@@ -85,10 +85,10 @@ namespace Zaina
             {
             }
 
-            if (menu.IsContinue())
-            {
-                menu.Close();
-            }
+            //if (menu.IsContinue())
+            //{
+            //    menu.Close();
+            //}
         }
 
         protected override void OnMzCommand(uint wParam, uint lParam)
@@ -120,10 +120,10 @@ namespace Zaina
         {
             base.OnClosing(e);
 
-            if (menu.IsContinue())
-            {
-                menu.Close();
-            }
+            //if (menu.IsContinue())
+            //{
+            //    menu.Close();
+            //}
         }
 
         void list_DrawItem(object sender, DrawItemEventArgs e)
@@ -186,6 +186,7 @@ namespace Zaina
 
         }
 
+        /*
         protected void BuildGridMenu()
         {
             if (null != menu)
@@ -219,6 +220,7 @@ namespace Zaina
 
             Controls.Add(menu);
         }
+        */
 
         private void FillList()
         {

@@ -8,7 +8,7 @@ namespace Zaina
     class Define
     {
         public const int BannerHeight = 133;
-        public const string BannerPath = @"skin\banner.jpg";
+        public const string BannerPath = @"skin\banner.png";
         public const string DefaultMapPath = @"skin\default_map.png";
         public const string AddressTitlePath = @"skin\address_title.png";
         public const string AboutDetailPath = @"skin\about.png";

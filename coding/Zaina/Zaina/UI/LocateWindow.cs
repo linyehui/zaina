@@ -223,8 +223,18 @@ namespace Zaina
                 double lat = 0;
                 double lng = 0;
                 string address = "";
-                CGeolocation.locate_GoogleGearsAPI(out lat, out lng);
-                CGeolocation.getLocations_GoogleGearsAPI(lat, lng, out address);
+                if (!CGeolocation.locate_GoogleGearsAPI(out lat, out lng))
+                {
+                    MessageBox.Show(L10n.LocateFailed);
+                    return;
+                }
+
+                if (!CGeolocation.getLocations_GoogleGearsAPI(lat, lng, out address))
+                {
+                    MessageBox.Show(L10n.GetAddressFailed);
+                    return;
+                }
+
                 labelAddress.Text = address;
 
                 History trackMan = new History();
