@@ -15,6 +15,7 @@ namespace Zaina
         public const string Exit = "退出";
         public const string About = "关于";
         public const string Return = "返回";
+        public const string ClearData = "全部删除";
 
         public const string ExitConfirm = "确认要退出 在哪 ？";
 
@@ -31,5 +32,7 @@ namespace Zaina
 
         public const string LocateFailed = "定位失败，请确认网络正常后重试。";
         public const string GetAddressFailed = "获取地址信息失败，请确认网络正常后重试。";
+
+        public const string CheckIsClearData = "您确认要删除全部历史记录和相关的地图缓存";
     }
 }

@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Threading;
 using MeizuSDK.Presentation;
 using MeizuSDK.Drawing;
+using MeizuSDK.Core;
 
 namespace Zaina
 {
@@ -125,6 +126,7 @@ namespace Zaina
                     SwitchMapType();
                     break;
                 case Define.LocateGridMenuId_SendSMS:
+                    SendSMSMessage();
                     break;
                 default:
                     break;
@@ -216,10 +218,16 @@ namespace Zaina
             WaitDialog.End();
         }
 
+        private void SendSMSMessage()
+        {
+            Telephony.SendSMSMessage("", labelAddress.Text);
+        }
+
         private void MultithreadLocate(object stateInfo)
         {
             try
             {
+                toolbar.EnableButton(ToolBarButtonIndex.MiddleTextButton, false);
                 double lat = 0;
                 double lng = 0;
                 string address = "";
@@ -236,6 +244,7 @@ namespace Zaina
                 }
 
                 labelAddress.Text = address;
+                toolbar.EnableButton(ToolBarButtonIndex.MiddleTextButton, true);
 
                 History trackMan = new History();
                 trackMan.Add(System.DateTime.Now, lat, lng, address);

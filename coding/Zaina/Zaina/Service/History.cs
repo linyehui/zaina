@@ -60,6 +60,21 @@ namespace Zaina
 
             return result;
         }
+
+        public void Clear()
+        {
+            try
+            {
+                SQLiteDBHelper db = new SQLiteDBHelper(DatabasePath);
+                string sql = @"delete from t_location where 1=1;";
+                db.ExecuteNonQuery(sql, null);
+            }
+            catch (SQLiteException ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+        }
+
         //////////////////////////////////////////////////////////////////////////
         // protected methods
 

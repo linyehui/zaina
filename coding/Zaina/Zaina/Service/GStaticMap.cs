@@ -67,10 +67,17 @@ namespace Zaina
                 m_currentZoomLevel = newZoomLevel;
         }
 
-        protected string GenCacheFileName(double lat, double lng, bool satellite, int zoomLevel)
+        public static string GetCacheDir()
         {
             string path = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase);
             path += "\\cache\\";
+
+            return path;
+        }
+
+        protected string GenCacheFileName(double lat, double lng, bool satellite, int zoomLevel)
+        {
+            string path = GetCacheDir();
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
 

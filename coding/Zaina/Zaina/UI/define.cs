@@ -18,6 +18,12 @@ namespace Zaina
 
         public const int MainButtonsTop = 20;
 
+        // MainWindow
+        public const int MainWindowListItemHeight = 85;
+        public const int MainWindowListFontSize = 20;
+        public const int MainWindowListArrowTopDis = 35;
+        public const int MainWindowListArrowLeftDis = 445;
+
         // LocateWindow define
         public const int MapWidth = 480;
         public const int MapHeight = 500;
@@ -26,6 +32,8 @@ namespace Zaina
 
         // History
         public const int HistoryListItemHeight = 85;
+        public const int HistoryListAddressFontSize = 18;
+        public const int HistoryListDateFontSize = 16;
 
         // 消息ID定义
         private const int LocateGridMenuIdBase = 1000;

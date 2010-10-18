@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Threading;
 using MeizuSDK.Presentation;
 using MeizuSDK.Drawing;
+using System.Diagnostics;
 
 namespace Zaina
 {
@@ -41,7 +42,7 @@ namespace Zaina
 
             toolbar.SetTextButton(ToolBarButtonIndex.LeftTextButton, true, true, L10n.Return);
             //toolbar.SetTextButton(ToolBarButtonIndex.MiddleTextButton, true, true, L10n.Operator);
-            //toolbar.SetTextButton(ToolBarButtonIndex.RightTextButton, true, true, L10n.ReLocate);
+            toolbar.SetTextButton(ToolBarButtonIndex.RightTextButton, true, true, L10n.ClearData);
             toolbar.ButtonClick += new EventHandler<ToolBar.ButtonEventArgs>(toolbar_ButtonClick);
             Controls.Add(toolbar);
 
@@ -51,7 +52,7 @@ namespace Zaina
             list.UltraGridLines = true;// 启用额外列表线
             list.OwnerDrawItem = true;// 启用自定义绘制
             list.DrawItem += new DrawItemEventHandler(list_DrawItem);
-            list.ItemSelected += new ItemSelectedEventHandler(list_ItemSelected);
+            //list.ItemSelected += new ItemSelectedEventHandler(list_ItemSelected);
             Controls.Add(list);
 
             base.OnLoad(e);
@@ -83,6 +84,7 @@ namespace Zaina
             }
             else if (e.Index == ToolBarButtonIndex.RightTextButton)
             {
+                ClearData();
             }
 
             //if (menu.IsContinue())
@@ -141,10 +143,10 @@ namespace Zaina
 
                 using (SolidBrush brushText = new SolidBrush(ForeColor))
                 {
-                    using (Font fontText = new Font(FontFamily.GenericSansSerif, list.FontSize, FontStyle.Regular))
+                    using (Font fontText = new Font(FontFamily.GenericSansSerif, Define.HistoryListAddressFontSize, FontStyle.Regular))
                     {
                         StringFormat sf = new StringFormat();
-                        sf.Alignment = StringAlignment.Far;
+                        sf.Alignment = StringAlignment.Near;
                         sf.LineAlignment = StringAlignment.Far;
 
                         Rectangle textRect = e.ItemRectangle;// 获取文本内容所在矩形
@@ -154,9 +156,9 @@ namespace Zaina
                     }
                 }
 
-                using (SolidBrush brushDate = new SolidBrush(ForeColor))
+                using (SolidBrush brushDate = new SolidBrush(Color.DarkGray))
                 {
-                    using (Font fontDate = new Font(FontFamily.GenericSansSerif, list.FontSize - 2, FontStyle.Regular))
+                    using (Font fontDate = new Font(FontFamily.GenericSansSerif, Define.HistoryListDateFontSize, FontStyle.Regular))
                     {
                         StringFormat sf = new StringFormat();
                         sf.Alignment = StringAlignment.Near;
@@ -172,18 +174,9 @@ namespace Zaina
             }
         }
 
-        void list_ItemSelected(object sender, ItemSelectedEventArgs e)
-        {
-            if (e.Item != null)
-            {
-                MessageBox.Show(" 用户选择了第" + e.ItemIndex + "项【" + e.Item.Text + "】", "List");
-            }
-        }
-
         void list_Click(object sender, ListBoxClickEventArgs e)
         {
             MessageBox.Show(e.Index + " Clicked", "List");
-
         }
 
         /*
@@ -254,6 +247,61 @@ namespace Zaina
             finally
             {
                 ((AutoResetEvent)stateInfo).Set();
+            }
+        }
+
+        private void ClearData()
+        {
+            if (MessageBox.DialogResult.OK != MessageBox.Show(
+                    L10n.CheckIsClearData,
+                    L10n.ApplicationName,
+                    MessageBox.MessageBoxButtons.MZ_OKCANCEL))
+                return;
+
+            WaitDialog.Begin(this);
+            ThreadPool.QueueUserWorkItem(new WaitCallback(MultithreadClearData), autoEvent);
+            autoEvent.WaitOne(Timeout.Infinite, false);
+            WaitDialog.End();
+        }
+
+        private void MultithreadClearData(object stateInfo)
+        {
+            try
+            {
+                if (list.Items.Count > 0)
+                {
+                    list.Items.Clear();
+                }
+
+                History history = new History();
+                history.Clear();
+
+                DeleteCachesFile();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                ((AutoResetEvent)stateInfo).Set();
+            }
+        }
+
+        private void DeleteCachesFile()
+        {
+            string cacheDir = GStaticMap.GetCacheDir();
+            string[] cachePaths = Directory.GetFiles(cacheDir);
+            foreach (string fileName in cachePaths)
+            {
+                try
+                {
+                    File.Delete(fileName);
+                }
+                catch (System.Exception ex)
+                {
+                    Debug.WriteLine(ex.Message);
+                }
             }
         }
     }

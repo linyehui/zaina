@@ -16,9 +16,10 @@ namespace Zaina
     {
         PictureBox banner = new PictureBox();
         ToolBar toolbar = new ToolBar();
-        ScrollableControl scrollPanel = new ScrollableControl();
-        Button btnLocate = new Button();
-        Button btnHistory = new Button();
+        ListBox list = new ListBox();
+
+        private ImageContainer imgContainer = new ImageContainer();
+        private ImagingHelper imgArrow;
 
         public MainWindow()
         {
@@ -67,26 +68,22 @@ namespace Zaina
         /// </summary>
         private void MultithreadInitControls()
         {
-            scrollPanel = new ScrollableControl();
-            scrollPanel.Size = new Size(Width, Height - ToolBar.HEIGHT - banner.Height);
-            scrollPanel.Location = new Point(0, banner.Height);
-            Controls.Add(scrollPanel);
+            imgArrow = imgContainer.LoadImageFromMzResV2(MzResV2.Png_Arrow_Right, true);
 
-            btnLocate.Text = L10n.BtnLocate;
-            btnLocate.ButtonType = Button.Type.Green;
-            btnLocate.Location = new Point(0, Define.MainButtonsTop);
-            btnLocate.Size = new Size(scrollPanel.Width, Define.MainButtonsHeight);
-            btnLocate.Click += new EventHandler(btnWhere_Click);
-            scrollPanel.Controls.Add(btnLocate);
+            list.Size = new Size(Width, Height - ToolBar.HEIGHT - banner.Height);
+            list.Location = new Point(0, banner.Height);
+            list.DefaultItemHeight = Define.MainWindowListItemHeight;
+            list.UltraGridLines = true;
+            list.OwnerDrawItem = true;
+            list.DrawItem += new DrawItemEventHandler(list_DrawItem);
+            list.Click += new System.EventHandler<MeizuSDK.Presentation.ListBoxClickEventArgs>(list_Click);
+            Controls.Add(list);
 
-            btnHistory.Text = L10n.BtnHistory;
-            btnHistory.ButtonType = Button.Type.Default;
-            btnHistory.ForeColor = Color.Black;
-            btnHistory.Location = new Point(0, btnLocate.Location.Y + btnLocate.Size.Height + Define.MainButtonsSpace);
-            btnHistory.Size = new Size(scrollPanel.Width, Define.MainButtonsHeight);
-            btnHistory.Click += new EventHandler(btnHistory_Click);
-            scrollPanel.Controls.Add(btnHistory);
-        }
+            ListItem itemLocate = new ListItem(L10n.BtnLocate, null);
+            list.Items.Add(itemLocate);
+            ListItem itemHistory = new ListItem(L10n.BtnHistory, null);
+            list.Items.Add(itemHistory);
+       }
 
         void UsbConnection_StatusChanged(object sender, UsbConnectionEventArgs e)
         {
@@ -121,19 +118,59 @@ namespace Zaina
             }
         }
 
-        void btnWhere_Click(object sender, EventArgs e)
+        void list_DrawItem(object sender, DrawItemEventArgs e)
         {
-            LocateWindow locate = new LocateWindow();
-            locate.ShowDialog(this);
-            //WaitDialog.Begin(this);
-            //Thread.Sleep(1000);
-            //WaitDialog.End();
+            if (list.IsLButtonDown && !list.IsMouseDownAtScrolling && e.ItemIndex == list.LastClickedIndex)
+            {
+                e.DrawItemSelectedBackground();
+            }
+
+            ListItem item = list.Items[e.ItemIndex];
+
+            if (item != null)
+            {
+                Graphics g = e.Graphics;
+
+                using (SolidBrush brushText = new SolidBrush(ForeColor))
+                {
+                    using (Font fontText = new Font(FontFamily.GenericSansSerif, Define.MainWindowListFontSize, FontStyle.Regular))
+                    {
+                        StringFormat sf = new StringFormat();
+                        sf.Alignment = StringAlignment.Near;
+                        sf.LineAlignment = StringAlignment.Center;
+
+                        Rectangle textRect = e.ItemRectangle;// 获取文本内容所在矩形
+                        textRect.Inflate(-12, -12);
+
+                        g.DrawString(item.Text, fontText, brushText, textRect, sf);
+
+                        Rectangle rcArrow = e.ItemRectangle;
+                        rcArrow.Y = e.ItemRectangle.Y + Define.MainWindowListArrowTopDis;
+                        rcArrow.X = e.ItemRectangle.X + Define.MainWindowListArrowLeftDis;
+                        rcArrow.Height= imgArrow.ImageHeight;
+                        rcArrow.Width = imgArrow.ImageWidth;
+                        imgArrow.Draw(g, rcArrow, false, false);
+                    }
+                }
+            }
         }
 
-        void btnHistory_Click(object sender, EventArgs e)
+        void list_Click(object sender, ListBoxClickEventArgs e)
         {
-            HistoryWindow history = new HistoryWindow();
-            history.ShowDialog(this);
+            if (list == null)
+                return;
+
+            ListItem item = list.Items[e.Index];
+            if (item.Text == L10n.BtnLocate)
+            {
+                LocateWindow locate = new LocateWindow();
+                locate.ShowDialog(this);
+            }
+            else if (item.Text == L10n.BtnHistory)
+            {
+                HistoryWindow history = new HistoryWindow();
+                history.ShowDialog(this);
+            }
         }
     }
 }
