@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using System.Diagnostics;
 
 namespace Zaina
 {
@@ -131,7 +132,7 @@ namespace Zaina
             }
             catch (System.Exception ex)
             {
-                System.Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
                 return "";
             }
         }

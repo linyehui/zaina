@@ -174,11 +174,6 @@ namespace Zaina
             }
         }
 
-        void list_Click(object sender, ListBoxClickEventArgs e)
-        {
-            MessageBox.Show(e.Index + " Clicked", "List");
-        }
-
         /*
         protected void BuildGridMenu()
         {

@@ -15,11 +15,8 @@ namespace Zaina
 
         public const string ZoomInPath = @"skin\zoom_in.png";
         public const string ZoomOutPath = @"skin\zoom_out.png";
-        public const string ZoomPath = @"skin\zoom.png";
-        public const string LocatePath = @"skin\locate.png";
-        public const string LocatePressedPath = @"skin\locate_pressed.png";
+        public const string MapTypePath = @"skin\map_type.png";
         public const string SMSPath = @"skin\sms.png";
-        public const string SMSPressedPath = @"skin\sms_pressed.png";
 
         public const int MainButtonsHeight = 100;
         public const int MainButtonsSpace = 10;

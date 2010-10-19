@@ -24,12 +24,8 @@ namespace Zaina
 
         private ImagingHelper imgZoomIn;
         private ImagingHelper imgZoomOut;
-        private ImagingHelper imgZoom;
-
-        private ImagingHelper imgLocate;
-        private ImagingHelper imgLocatePressed;
+        private ImagingHelper imgMapType;
         private ImagingHelper imgSMS;
-        private ImagingHelper imgSMSPressed;
 
         private GridMenu menu;
 
@@ -81,10 +77,14 @@ namespace Zaina
         {
             if (e.Index == ToolBarButtonIndex.LeftTextButton)
             {
+                CloseMenu();
+
                 if (IsDialog)
                     DialogResult = DialogResult.Yes;
                 else
                     Close();
+
+                return;
             }
             else if (e.Index == ToolBarButtonIndex.MiddleTextButton)
             {
@@ -101,12 +101,9 @@ namespace Zaina
             }
             else if (e.Index == ToolBarButtonIndex.RightTextButton)
             {
+                CloseMenu();
                 Locate();
-            }
-
-            if (menu.IsContinue())
-            {
-                menu.Close();
+                return;
             }
         }
 
@@ -138,8 +135,16 @@ namespace Zaina
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
-            base.OnClosing(e);
+            CloseMenu();
 
+            base.OnClosing(e);
+        }
+
+        protected void CloseMenu()
+        {
+            if (null == menu)
+                return;
+            
             if (menu.IsContinue())
             {
                 menu.Close();
@@ -157,38 +162,29 @@ namespace Zaina
             string path = Path.Combine(Application.StartupPath, Define.ZoomInPath);
             imgZoomIn = imgContainer.LoadImage(path);
 
-            path = Path.Combine(Application.StartupPath, Define.ZoomPath);
-            imgZoom = imgContainer.LoadImage(path);
-
             path = Path.Combine(Application.StartupPath, Define.ZoomOutPath);
             imgZoomOut = imgContainer.LoadImage(path);
 
-            path = Path.Combine(Application.StartupPath, Define.LocatePath);
-            imgLocate = imgContainer.LoadImage(path);
-
-            path = Path.Combine(Application.StartupPath, Define.LocatePressedPath);
-            imgLocatePressed = imgContainer.LoadImage(path);
+            path = Path.Combine(Application.StartupPath, Define.MapTypePath);
+            imgMapType = imgContainer.LoadImage(path);
 
             path = Path.Combine(Application.StartupPath, Define.SMSPath);
             imgSMS = imgContainer.LoadImage(path);
 
-            path = Path.Combine(Application.StartupPath, Define.SMSPressedPath);
-            imgSMSPressed = imgContainer.LoadImage(path);
-
             //menu.ItemClicked += new GridMenuItemClickedEventHandler(menu_ItemClicked);
 
-            GridMenuItem item = new GridMenuItem(Define.LocateGridMenuId_ZoomIn, L10n.MapZoomIn, imgZoomIn, imgZoom);
+            GridMenuItem item = new GridMenuItem(Define.LocateGridMenuId_ZoomIn, L10n.MapZoomIn, imgZoomIn, imgZoomIn);
             menu.Items.Add(item);
-            item = new GridMenuItem(Define.LocateGridMenuId_ZoomOut, L10n.MapZoomOut, imgZoomOut, imgZoom);
+            item = new GridMenuItem(Define.LocateGridMenuId_ZoomOut, L10n.MapZoomOut, imgZoomOut, imgZoomOut);
             menu.Items.Add(item);
 
             if (staticMap.ShowSatellite)
-                item = new GridMenuItem(Define.LocateGridMenuId_MapType, L10n.RoadMap, imgLocate, imgLocatePressed);
+                item = new GridMenuItem(Define.LocateGridMenuId_MapType, L10n.RoadMap, imgMapType, imgMapType);
             else
-                item = new GridMenuItem(Define.LocateGridMenuId_MapType, L10n.Satellite, imgLocate, imgLocatePressed);
+                item = new GridMenuItem(Define.LocateGridMenuId_MapType, L10n.Satellite, imgMapType, imgMapType);
             menu.Items.Add(item);
 
-            item = new GridMenuItem(Define.LocateGridMenuId_SendSMS, L10n.SendSMS, imgSMS, imgSMSPressed);
+            item = new GridMenuItem(Define.LocateGridMenuId_SendSMS, L10n.SendSMS, imgSMS, imgSMS);
             menu.Items.Add(item);
 
             Controls.Add(menu);

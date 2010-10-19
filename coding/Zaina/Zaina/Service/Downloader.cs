@@ -2,10 +2,10 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
-using System.Windows.Forms;
 using System.Net;
 using System.IO;
 using MeizuSDK.Core;
+using System.Diagnostics;
 
 namespace Zaina
 {
@@ -19,7 +19,6 @@ namespace Zaina
         /// <returns></returns>
         public static bool SavePhotoFromUrl(string FileName, string Url)
         {
-            bool Value = false;
             WebResponse response = null;
             Stream stream = null;
 
@@ -47,16 +46,16 @@ namespace Zaina
 
                 if (!response.ContentType.ToLower().StartsWith("text/"))
                 {
-                    Value = SaveBinaryFile(response, FileName);
-
+                    return SaveBinaryFile(response, FileName);
                 }
 
+                return false;
             }
             catch (Exception ex)
             {
-                MessageBox.Show("下载失败：" + ex.Message);
+                Debug.WriteLine("下载失败：" + ex.Message);
+                return false;
             }
-            return Value;
         }
 
         /// <summary>
