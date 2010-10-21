@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using MeizuSDK.Presentation;
 using MeizuSDK.Drawing;
+using System.Reflection;
 
 namespace Zaina
 {
@@ -13,7 +14,8 @@ namespace Zaina
     {
         protected ToolBar toolbar = new ToolBar();
         PictureBox banner = new PictureBox();
-        PictureBox about = new PictureBox();
+
+        string fileVersion;
 
         //private ImagingHelper imgBanner = new ImagingHelper();
 
@@ -25,6 +27,11 @@ namespace Zaina
 
         protected override void OnLoad(EventArgs e)
         {
+            Assembly assembly = Assembly.GetExecutingAssembly();   
+            AssemblyName assemblyName = assembly.GetName();
+            Version version = assemblyName.Version;
+            fileVersion = String.Format("{0}.{1}.{2}", version.Major, version.Minor, version.Build);
+
             toolbar.SetTextButton(ToolBarButtonIndex.LeftTextButton, true, true, L10n.Return);
             toolbar.ButtonClick += new EventHandler<ToolBar.ButtonEventArgs>(toolbar_ButtonClick);
             Controls.Add(toolbar);
@@ -36,20 +43,32 @@ namespace Zaina
             banner.PaintMode = MeizuSDK.Drawing.PaintMode.Normal;
             Controls.Add(banner);
 
-            path = Path.Combine(Application.StartupPath, Define.AboutDetailPath);
-            about.LoadFromFile(path);
-            about.Location = new Point(0, Define.BannerHeight);
-            about.Size = new Size(Screen.ClientWidth, Height - Define.BannerHeight - ToolBar.HEIGHT);
-            about.PaintMode = MeizuSDK.Drawing.PaintMode.Normal;
-            Controls.Add(about);
-
             base.OnLoad(e);
         }
 
-        //protected override void OnPaint(PaintEventArgs e)
-        //{
-        //    imgBanner.Draw(e.Graphics, e.UpdateRectangle, false, false);
-        //}
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            using (Graphics g = e.Graphics)
+            using (Font fontText = new Font(FontFamily.GenericSansSerif, Define.HistoryListAddressFontSize, FontStyle.Regular))
+            using (Font fontCopyright = new Font(FontFamily.GenericSansSerif, Define.HistoryListAddressFontSize - 2, FontStyle.Regular))
+            using (StringFormat sf = new StringFormat(StringFormatFlags.NoClip))
+            using (SolidBrush brushFore = new SolidBrush(ForeColor))
+            using (SolidBrush brushCopyright = new SolidBrush(Color.DarkGray))
+            {
+                sf.Alignment = StringAlignment.Near;
+                sf.LineAlignment = StringAlignment.Near;
+
+                g.DrawString(L10n.AppVersion + fileVersion, fontText, brushFore, 20, 153, sf);
+                g.DrawString(L10n.AppDescription, fontText, brushFore, 20, 190, sf);
+                g.DrawString(L10n.AppThanks1, fontText, brushFore, 20, 220, sf);
+                g.DrawString(L10n.AppThanks2, fontText, brushFore, 20, 250, sf);
+
+                g.DrawString(L10n.AppAuthor, fontText, brushFore, 20, 420, sf);
+                g.DrawString(L10n.Email, fontText, brushFore, 20, 450, sf);
+                g.DrawString(L10n.HomePage, fontText, brushFore, 20, 480, sf);
+                g.DrawString(L10n.Copyright, fontCopyright, brushCopyright, 20, 580, sf);
+            }
+        }
 
         protected virtual void toolbar_ButtonClick(object sender, ToolBar.ButtonEventArgs e)
         {
