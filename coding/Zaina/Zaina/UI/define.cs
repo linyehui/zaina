@@ -35,10 +35,16 @@ namespace Zaina
         public const int AddressTitleHeight = 32;
         public const int AddressHeight = 84;
 
+        public const int AddressFontSize = 18;
+
         // History
         public const int HistoryListItemHeight = 85;
         public const int HistoryListAddressFontSize = 18;
         public const int HistoryListDateFontSize = 16;
+
+        // About 
+        public const int AboutFontSize = 18;
+        public const int CopyrightFontSize = 16;
 
         // 消息ID定义
         private const int LocateGridMenuIdBase = 1000;

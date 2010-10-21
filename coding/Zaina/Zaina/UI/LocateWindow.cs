@@ -14,11 +14,13 @@ namespace Zaina
 {
     class LocateWindow : Form
     {
+        private const int TextMargin = 10;
+
         ToolBar toolbar = new ToolBar();
         PictureBox picBoxMap = new PictureBox();
         PictureBox picBoxCaption = new PictureBox();
-        Label labelAddress = new Label();
         GStaticMap staticMap = new GStaticMap();
+        string Address = "";
 
         private ImageContainer imgContainer = new ImageContainer();
 
@@ -53,13 +55,6 @@ namespace Zaina
             picBoxCaption.PaintMode = MeizuSDK.Drawing.PaintMode.Normal;
             Controls.Add(picBoxCaption);
 
-            labelAddress.Text = "";
-            labelAddress.Location = new Point(0, Define.MapHeight + Define.AddressTitleHeight);
-            labelAddress.VScroll = true;
-            labelAddress.HScroll = true;
-            labelAddress.Size = new Size(Width, Define.AddressHeight);
-            Controls.Add(labelAddress);
-
             BuildGridMenu();
 
             toolbar.SetTextButton(ToolBarButtonIndex.LeftTextButton, true, true, L10n.Return);
@@ -71,6 +66,42 @@ namespace Zaina
             base.OnLoad(e);
 
             Locate();
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            if (Address.Length <= 0)
+                return;
+
+            Rectangle rcLabel = new Rectangle(0,
+                Define.MapHeight + Define.AddressTitleHeight + TextMargin,
+                Width,
+                Define.AddressHeight - (TextMargin * 2));
+
+            using (Graphics g = e.Graphics)
+            using (Font fontText = new Font(FontFamily.GenericSansSerif, Define.AddressFontSize, FontStyle.Regular))
+            using (StringFormat sf = new StringFormat(StringFormatFlags.NoClip))
+            using (SolidBrush brushFore = new SolidBrush(ForeColor))
+            {
+                sf.Alignment = StringAlignment.Center;
+                sf.LineAlignment = StringAlignment.Center;
+
+                // 一个简单的智能双行显示文字
+                SizeF lineSize = g.MeasureString(Address, fontText);
+                if ((lineSize.Width + (TextMargin * 2)) > rcLabel.Width)
+                {
+                    // 双行
+                    Rectangle rcFirstLine = new Rectangle(rcLabel.X, rcLabel.Y, rcLabel.Width, rcLabel.Height / 2);
+                    g.DrawString(Address.Substring(0, Address.Length / 2), fontText, brushFore, rcFirstLine, sf);
+                    Rectangle rcSecondtLine = new Rectangle(rcLabel.X, rcLabel.Y + rcLabel.Height / 2, rcLabel.Width, rcLabel.Height / 2);
+                    g.DrawString(Address.Substring(Address.Length / 2), fontText, brushFore, rcSecondtLine, sf);
+                }
+                else
+                {
+                    // 单行
+                    g.DrawString(Address, fontText, brushFore, rcLabel, sf);
+                }                
+            }
         }
 
         protected void toolbar_ButtonClick(object sender, ToolBar.ButtonEventArgs e)
@@ -228,7 +259,7 @@ namespace Zaina
 
         private void SendSMSMessage()
         {
-            Telephony.SendSMSMessage("", labelAddress.Text);
+            Telephony.SendSMSMessage("", Address);
         }
 
         private void MultithreadLocate(object stateInfo)
@@ -251,7 +282,7 @@ namespace Zaina
                     return;
                 }
 
-                labelAddress.Text = address;
+                Address = address;
                 toolbar.EnableButton(ToolBarButtonIndex.MiddleTextButton, true);
 
                 History trackMan = new History();

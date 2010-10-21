@@ -49,8 +49,8 @@ namespace Zaina
         protected override void OnPaint(PaintEventArgs e)
         {
             using (Graphics g = e.Graphics)
-            using (Font fontText = new Font(FontFamily.GenericSansSerif, Define.HistoryListAddressFontSize, FontStyle.Regular))
-            using (Font fontCopyright = new Font(FontFamily.GenericSansSerif, Define.HistoryListAddressFontSize - 2, FontStyle.Regular))
+            using (Font fontText = new Font(FontFamily.GenericSansSerif, Define.AboutFontSize, FontStyle.Regular))
+            using (Font fontCopyright = new Font(FontFamily.GenericSansSerif, Define.CopyrightFontSize, FontStyle.Regular))
             using (StringFormat sf = new StringFormat(StringFormatFlags.NoClip))
             using (SolidBrush brushFore = new SolidBrush(ForeColor))
             using (SolidBrush brushCopyright = new SolidBrush(Color.DarkGray))
