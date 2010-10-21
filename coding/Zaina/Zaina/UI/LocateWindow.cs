@@ -239,13 +239,13 @@ namespace Zaina
                 double lat = 0;
                 double lng = 0;
                 string address = "";
-                if (!CGeolocation.locate_GoogleGearsAPI(out lat, out lng))
+                if (!GetLatLng(out lat, out lng))
                 {
                     MessageBox.Show(L10n.LocateFailed);
                     return;
                 }
 
-                if (!CGeolocation.getLocations_GoogleGearsAPI(lat, lng, out address))
+                if (!GetAddress(lat, lng, out address))
                 {
                     MessageBox.Show(L10n.GetAddressFailed);
                     return;
@@ -285,6 +285,37 @@ namespace Zaina
             {
                 ((AutoResetEvent)stateInfo).Set();
             }
+        }
+
+        private bool GetLatLng(out double lat, out double lng)
+        {
+            lat = 0;
+            lng = 0;
+            
+            // 最多进行3次
+            int maxRetryTimes = 3;
+            for (int i = 0; i < maxRetryTimes; i++)
+            {
+                if (CGeolocation.locate_GoogleGearsAPI(out lat, out lng))
+                    return true;
+            }
+
+            return false;
+        }
+
+        private bool GetAddress(double lat, double lng, out string address)
+        {
+            address = "";
+
+            // 最多进行3次
+            int maxRetryTimes = 3;
+            for (int i = 0; i < maxRetryTimes; i++)
+            {
+                if (CGeolocation.getLocations_GoogleGearsAPI(lat, lng, out address))
+                    return true;
+            }
+
+            return false;
         }
     }
 }

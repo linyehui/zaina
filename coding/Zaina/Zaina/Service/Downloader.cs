@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Text;
 using System.Net;
 using System.IO;
-using MeizuSDK.Core;
 using System.Diagnostics;
 
 namespace Zaina
@@ -25,21 +24,7 @@ namespace Zaina
             try
             {
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Url);
-
-                NetworkingStatus status = Networking.Status;
-                //MessageBox.Show("NetworkingStatus: " + status.ToString());
-                if (NetworkingStatus.None == status
-                    || NetworkingStatus.UsbCable == status
-                    || NetworkingStatus.EdgeProxy == status)
-                {
-                    if (!Networking.GprsConnect(GprsAppType.Default))
-                    {
-                        //MessageBox.Show("GRPS 连接失败");
-                    }
-
-                    WebProxy wp = new WebProxy("10.0.0.172", 80);
-                    request.Proxy = wp;
-                }
+                M8Helper.Network.InitMeizuNewwork(request);
 
                 response = request.GetResponse();
                 stream = response.GetResponseStream();

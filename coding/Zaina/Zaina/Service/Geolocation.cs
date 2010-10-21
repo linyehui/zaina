@@ -78,21 +78,7 @@ class CGeolocation
             byte[] byteArray = encoding.GetBytes(StrWriter.ToString());
             StrWriter.Close();
 
-            // set request
-            NetworkingStatus status = Networking.Status;
-            //MessageBox.Show("NetworkingStatus: " + status.ToString());
-            if (NetworkingStatus.None == status
-                || NetworkingStatus.UsbCable == status
-                || NetworkingStatus.EdgeProxy == status)
-            {
-                if (!Networking.GprsConnect(GprsAppType.Default))
-                {
-                    //MessageBox.Show("GRPS 连接失败");
-                }
-
-                WebProxy wp = new WebProxy("10.0.0.172", 80);
-                request.Proxy = wp;
-            }
+            M8Helper.Network.InitMeizuNewwork(request);
             
             request.ContentLength = byteArray.Length;
             Stream postStream = request.GetRequestStream();
@@ -137,23 +123,9 @@ class CGeolocation
             url += Lat.ToString();
             url += ",";
             url += Lng.ToString();
+
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-
-            // set request
-            NetworkingStatus status = Networking.Status;
-            //MessageBox.Show("NetworkingStatus: " + status.ToString());
-            if (NetworkingStatus.None == status
-                || NetworkingStatus.UsbCable == status
-                || NetworkingStatus.EdgeProxy == status)
-            {
-                if (!Networking.GprsConnect(GprsAppType.Default))
-                {
-                    //MessageBox.Show("GRPS 连接失败");
-                }
-
-                WebProxy wp = new WebProxy("10.0.0.172", 80);
-                request.Proxy = wp;
-            }
+            M8Helper.Network.InitMeizuNewwork(request);
 
             // Get the response.
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();

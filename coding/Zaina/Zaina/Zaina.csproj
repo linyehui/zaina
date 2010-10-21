@@ -18,6 +18,8 @@
     <NativePlatformName>Windows CE</NativePlatformName>
     <FormFactorID>
     </FormFactorID>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -78,6 +80,7 @@
     <Compile Include="Service\GStaticMap.cs" />
     <Compile Include="Service\History.cs" />
     <Compile Include="Service\LocationItem.cs" />
+    <Compile Include="Service\M8Helper.cs" />
     <Compile Include="Service\RIL.cs" />
     <Compile Include="Service\SQLiteQueryBrowser.cs" />
     <Compile Include="UI\AboutWindow.cs" />
