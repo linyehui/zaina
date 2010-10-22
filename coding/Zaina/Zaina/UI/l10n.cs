@@ -36,7 +36,7 @@ namespace Zaina
         public const string CheckIsClearData = "您确认要删除全部历史记录和相关的地图缓存";
         
         public const string AppVersion = "软件版本：";
-		public const string AppDescription = "在哪是一款免费手机定位软件。";
+		public const string AppDescription = "在哪是一款开源免费手机定位软件。";
         public const string AppThanks1 = "在哪的诞生离不开开源项目：";
         public const string AppThanks2 = "Managed Meizu SDK Wrapper 。";
 		public const string AppAuthor   = "软件作者  ：linyehui (twitter)";

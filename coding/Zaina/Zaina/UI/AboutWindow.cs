@@ -59,9 +59,9 @@ namespace Zaina
                 sf.LineAlignment = StringAlignment.Near;
 
                 g.DrawString(L10n.AppVersion + fileVersion, fontText, brushFore, 20, 153, sf);
-                g.DrawString(L10n.AppDescription, fontText, brushFore, 20, 190, sf);
-                g.DrawString(L10n.AppThanks1, fontText, brushFore, 20, 220, sf);
-                g.DrawString(L10n.AppThanks2, fontText, brushFore, 20, 250, sf);
+                g.DrawString(L10n.AppDescription, fontText, brushFore, 20, 240, sf);
+                g.DrawString(L10n.AppThanks1, fontText, brushFore, 20, 270, sf);
+                g.DrawString(L10n.AppThanks2, fontText, brushFore, 20, 300, sf);
 
                 g.DrawString(L10n.AppAuthor, fontText, brushFore, 20, 420, sf);
                 g.DrawString(L10n.Email, fontText, brushFore, 20, 450, sf);
