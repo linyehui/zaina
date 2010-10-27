@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using MeizuSDK.Presentation;
 using System.Diagnostics;
 using System.IO;
+
+using MeizuSDK.Presentation;
+using MeizuSDK.Core;
 
 namespace Zaina
 {
@@ -25,6 +27,10 @@ namespace Zaina
             catch (System.Exception ex)
             {
                 Debug.WriteLine(ex.Message);
+            }
+            finally
+            {
+                Networking.GprsDisconnect();
             }
         }
     }
