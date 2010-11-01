@@ -47,6 +47,13 @@ namespace Zaina
         public const int CopyrightFontSize = 16;
 
         // 消息ID定义
+
+        public const uint MZFC_WM_MESSAGE = 0xFFF10000;
+        public const uint MZ_WM_COMMAND = (MZFC_WM_MESSAGE + 1);
+
+        private const int LocateCommandBase = 500;
+        public const uint LoadFinish = LocateCommandBase + 1;
+
         private const int LocateGridMenuIdBase = 1000;
         public const int LocateGridMenuId_ZoomIn = LocateGridMenuIdBase + 1;
         public const int LocateGridMenuId_ZoomOut = LocateGridMenuIdBase + 2;

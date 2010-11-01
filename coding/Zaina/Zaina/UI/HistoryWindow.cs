@@ -53,6 +53,7 @@ namespace Zaina
             list.OwnerDrawItem = true;// 启用自定义绘制
             list.DrawItem += new DrawItemEventHandler(list_DrawItem);
             //list.ItemSelected += new ItemSelectedEventHandler(list_ItemSelected);
+            list.Click += new System.EventHandler<MeizuSDK.Presentation.ListBoxClickEventArgs>(list_Click);
             Controls.Add(list);
 
             base.OnLoad(e);
@@ -95,7 +96,7 @@ namespace Zaina
 
         protected override void OnMzCommand(uint wParam, uint lParam)
         {
-            int id = (int)NativeMethods.LOWORD(wParam);
+            uint id = NativeMethods.LOWORD(wParam);
             //GridMenuItem item = menu.Items[id];
 
             switch (id)
@@ -172,6 +173,15 @@ namespace Zaina
                     }
                 }
             }
+        }
+
+        void list_Click(object sender, ListBoxClickEventArgs e)
+        {
+            LocationItem item = (LocationItem)list.Items[e.Index].Value;
+           
+            LocateWindow locate = new LocateWindow();
+            locate.SetFirstTimeLocation(item.Lat, item.Lng, item.Address);
+            locate.ShowDialog(this);
         }
 
         /*

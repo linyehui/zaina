@@ -21,6 +21,9 @@ namespace Zaina
         PictureBox picBoxCaption = new PictureBox();
         GStaticMap staticMap = new GStaticMap();
         string Address = "";
+        double Lat = 0;
+        double Lng = 0;
+        bool FirstLocation = false;
 
         private ImageContainer imgContainer = new ImageContainer();
 
@@ -37,6 +40,19 @@ namespace Zaina
         {
             this.AnimationIn = MeizuSDK.Drawing.AnimationType.ScrollRightToLeftPush;
             this.AnimationOut = MeizuSDK.Drawing.AnimationType.ScrollLeftToRightPush;
+        }
+
+        public bool SetFirstTimeLocation(double lat, double lng, string address)
+        {
+            if (lat == 0 || lng == 0 || address.Length <= 0)
+                return false;
+
+            Lat = lat;
+            Lng = lng;
+            Address = address;
+            FirstLocation = true;
+
+            return true;
         }
 
         protected override void OnLoad(EventArgs e)
@@ -65,7 +81,7 @@ namespace Zaina
 
             base.OnLoad(e);
 
-            Locate();
+            NativeMethods.PostMessage(this.HWnd, Define.MZ_WM_COMMAND, Define.LoadFinish, 0);
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -145,6 +161,9 @@ namespace Zaina
 
             switch (id)
             {
+                case (int)Define.LoadFinish:
+                    OnLoadFinish();
+                    break;
                 case Define.LocateGridMenuId_ZoomIn:
                     ZoomIn();
                     break;
@@ -169,6 +188,19 @@ namespace Zaina
             CloseMenu();
 
             base.OnClosing(e);
+        }
+
+        protected void OnLoadFinish()
+        {
+            if (FirstLocation)
+            {
+                ShowHistory();
+                FirstLocation = false;
+            }
+            else
+            {
+                Locate();
+            }
         }
 
         protected void CloseMenu()
@@ -225,6 +257,14 @@ namespace Zaina
         {
             WaitDialog.Begin(this);
             ThreadPool.QueueUserWorkItem(new WaitCallback(MultithreadLocate), autoEvent);
+            autoEvent.WaitOne(Timeout.Infinite, false);
+            WaitDialog.End();
+        }
+
+        private void ShowHistory()
+        {
+            WaitDialog.Begin(this);
+            ThreadPool.QueueUserWorkItem(new WaitCallback(MultithreadShowHistory), autoEvent);
             autoEvent.WaitOne(Timeout.Infinite, false);
             WaitDialog.End();
         }
@@ -289,6 +329,26 @@ namespace Zaina
                 trackMan.Add(System.DateTime.Now, lat, lng, address);
 
                 string mapFileName = staticMap.GenMap(lat, lng);
+                picBoxMap.LoadFromFile(mapFileName);
+            }
+            catch (System.Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+            finally
+            {
+                ((AutoResetEvent)stateInfo).Set();
+            }
+        }
+
+        private void MultithreadShowHistory(object stateInfo)
+        {
+            try
+            {
+                if (Lat == 0 || Lng == 0 || Address.Length <= 0)
+                    return;
+
+                string mapFileName = staticMap.GenMap(Lat, Lng);
                 picBoxMap.LoadFromFile(mapFileName);
             }
             catch (System.Exception ex)
