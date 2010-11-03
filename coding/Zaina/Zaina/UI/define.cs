@@ -18,6 +18,11 @@ namespace Zaina
         public const string MapTypePath = @"skin\map_type.png";
         public const string SMSPath = @"skin\sms.png";
 
+        public const string ShiftLeftPath = @"skin\shift_left.png";
+        public const string ShiftRightPath = @"skin\shift_right.png";
+        public const string ShiftUpPath = @"skin\shift_up.png";
+        public const string ShiftDownPath = @"skin\shift_down.png";
+
         public const int MainButtonsHeight = 100;
         public const int MainButtonsSpace = 10;
 
@@ -59,5 +64,10 @@ namespace Zaina
         public const int LocateGridMenuId_ZoomOut = LocateGridMenuIdBase + 2;
         public const int LocateGridMenuId_MapType = LocateGridMenuIdBase + 3;
         public const int LocateGridMenuId_SendSMS = LocateGridMenuIdBase + 4;
+        
+        public const int LocateGridMenuId_ShiftLeft = LocateGridMenuIdBase + 5;
+        public const int LocateGridMenuId_ShiftRight = LocateGridMenuIdBase + 6;
+        public const int LocateGridMenuId_ShiftUp = LocateGridMenuIdBase + 7;
+        public const int LocateGridMenuId_ShiftDown = LocateGridMenuIdBase + 8;
     }
 }

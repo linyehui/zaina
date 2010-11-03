@@ -180,7 +180,7 @@ namespace Zaina
             LocationItem item = (LocationItem)list.Items[e.Index].Value;
            
             LocateWindow locate = new LocateWindow();
-            locate.SetFirstTimeLocation(item.Lat, item.Lng, item.Address);
+            locate.InitHistory(item.Lat, item.Lng, item.Address);
             locate.ShowDialog(this);
         }
 

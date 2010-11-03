@@ -68,6 +68,19 @@ namespace Zaina
                 m_currentZoomLevel = newZoomLevel;
         }
 
+        public void ShiftLeft()
+        {
+        }
+        public void ShiftRight()
+        {
+        }
+        public void ShiftUp()
+        {
+        }
+        public void ShiftDown()
+        {
+        }
+
         public static string GetCacheDir()
         {
             string path = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase);

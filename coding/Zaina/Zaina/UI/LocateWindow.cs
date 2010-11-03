@@ -23,7 +23,7 @@ namespace Zaina
         string Address = "";
         double Lat = 0;
         double Lng = 0;
-        bool FirstLocation = false;
+        bool HistoryView = false;
 
         private ImageContainer imgContainer = new ImageContainer();
 
@@ -31,6 +31,10 @@ namespace Zaina
         private ImagingHelper imgZoomOut;
         private ImagingHelper imgMapType;
         private ImagingHelper imgSMS;
+        private ImagingHelper imgShiftLeft;
+        private ImagingHelper imgShiftRight;
+        private ImagingHelper imgShiftUp;
+        private ImagingHelper imgShiftDown;
 
         private GridMenu menu;
 
@@ -42,7 +46,7 @@ namespace Zaina
             this.AnimationOut = MeizuSDK.Drawing.AnimationType.ScrollLeftToRightPush;
         }
 
-        public bool SetFirstTimeLocation(double lat, double lng, string address)
+        public bool InitHistory(double lat, double lng, string address)
         {
             if (lat == 0 || lng == 0 || address.Length <= 0)
                 return false;
@@ -50,7 +54,7 @@ namespace Zaina
             Lat = lat;
             Lng = lng;
             Address = address;
-            FirstLocation = true;
+            HistoryView = true;
 
             return true;
         }
@@ -75,7 +79,9 @@ namespace Zaina
 
             toolbar.SetTextButton(ToolBarButtonIndex.LeftTextButton, true, true, L10n.Return);
             toolbar.SetTextButton(ToolBarButtonIndex.MiddleTextButton, true, true, L10n.MapOptions);
-            toolbar.SetTextButton(ToolBarButtonIndex.RightTextButton, true, true, L10n.ReLocate);
+            if (!HistoryView)
+                toolbar.SetTextButton(ToolBarButtonIndex.RightTextButton, true, true, L10n.ReLocate);
+
             toolbar.ButtonClick += new EventHandler<ToolBar.ButtonEventArgs>(toolbar_ButtonClick);
             Controls.Add(toolbar);
 
@@ -176,6 +182,18 @@ namespace Zaina
                 case Define.LocateGridMenuId_SendSMS:
                     SendSMSMessage();
                     break;
+                case Define.LocateGridMenuId_ShiftLeft:
+                    ShiftLeft();
+                    break;
+                case Define.LocateGridMenuId_ShiftRight:
+                    ShiftRight();
+                    break;
+                case Define.LocateGridMenuId_ShiftUp:
+                    ShiftUp();
+                    break;
+                case Define.LocateGridMenuId_ShiftDown:
+                    ShiftDown();
+                    break;
                 default:
                     break;
             }
@@ -192,10 +210,9 @@ namespace Zaina
 
         protected void OnLoadFinish()
         {
-            if (FirstLocation)
+            if (HistoryView)
             {
                 ShowHistory();
-                FirstLocation = false;
             }
             else
             {
@@ -234,13 +251,31 @@ namespace Zaina
             path = Path.Combine(Application.StartupPath, Define.SMSPath);
             imgSMS = imgContainer.LoadImage(path);
 
+            path = Path.Combine(Application.StartupPath, Define.ShiftLeftPath);
+            imgShiftLeft = imgContainer.LoadImage(path);
+            path = Path.Combine(Application.StartupPath, Define.ShiftRightPath);
+            imgShiftRight = imgContainer.LoadImage(path);
+            path = Path.Combine(Application.StartupPath, Define.ShiftUpPath);
+            imgShiftUp = imgContainer.LoadImage(path);
+            path = Path.Combine(Application.StartupPath, Define.ShiftDownPath);
+            imgShiftDown = imgContainer.LoadImage(path);
+
             //menu.ItemClicked += new GridMenuItemClickedEventHandler(menu_ItemClicked);
 
             GridMenuItem item = new GridMenuItem(Define.LocateGridMenuId_ZoomIn, L10n.MapZoomIn, imgZoomIn, imgZoomIn);
             menu.Items.Add(item);
+            item = new GridMenuItem(Define.LocateGridMenuId_ShiftUp, L10n.MapShiftUp, imgShiftUp, imgShiftUp);
+            menu.Items.Add(item);
             item = new GridMenuItem(Define.LocateGridMenuId_ZoomOut, L10n.MapZoomOut, imgZoomOut, imgZoomOut);
             menu.Items.Add(item);
 
+            item = new GridMenuItem(Define.LocateGridMenuId_ShiftLeft, L10n.MapShiftLeft, imgShiftLeft, imgShiftLeft);
+            menu.Items.Add(item);
+            item = new GridMenuItem(Define.LocateGridMenuId_ShiftDown, L10n.MapShiftDown, imgShiftDown, imgShiftDown);
+            menu.Items.Add(item);
+            item = new GridMenuItem(Define.LocateGridMenuId_ShiftRight, L10n.MapShiftRight, imgShiftRight, imgShiftRight);
+            menu.Items.Add(item);
+            
             if (staticMap.ShowSatellite)
                 item = new GridMenuItem(Define.LocateGridMenuId_MapType, L10n.RoadMap, imgMapType, imgMapType);
             else
@@ -292,6 +327,39 @@ namespace Zaina
             WaitDialog.Begin(this);
             staticMap.ShowSatellite = !staticMap.ShowSatellite;
             BuildGridMenu();
+            ThreadPool.QueueUserWorkItem(new WaitCallback(MultithreadRebuildMap), autoEvent);
+            autoEvent.WaitOne(Timeout.Infinite, false);
+            WaitDialog.End();
+        }
+
+        private void ShiftLeft()
+        {
+            WaitDialog.Begin(this);
+            staticMap.ShiftLeft();
+            ThreadPool.QueueUserWorkItem(new WaitCallback(MultithreadRebuildMap), autoEvent);
+            autoEvent.WaitOne(Timeout.Infinite, false);
+            WaitDialog.End();
+        }
+        private void ShiftRight()
+        {
+            WaitDialog.Begin(this);
+            staticMap.ShiftRight();
+            ThreadPool.QueueUserWorkItem(new WaitCallback(MultithreadRebuildMap), autoEvent);
+            autoEvent.WaitOne(Timeout.Infinite, false);
+            WaitDialog.End();
+        }
+        private void ShiftUp()
+        {
+            WaitDialog.Begin(this);
+            staticMap.ShiftUp();
+            ThreadPool.QueueUserWorkItem(new WaitCallback(MultithreadRebuildMap), autoEvent);
+            autoEvent.WaitOne(Timeout.Infinite, false);
+            WaitDialog.End();
+        }
+        private void ShiftDown()
+        {
+            WaitDialog.Begin(this);
+            staticMap.ShiftDown();
             ThreadPool.QueueUserWorkItem(new WaitCallback(MultithreadRebuildMap), autoEvent);
             autoEvent.WaitOne(Timeout.Infinite, false);
             WaitDialog.End();
