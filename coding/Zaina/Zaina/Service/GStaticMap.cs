@@ -18,6 +18,8 @@ namespace Zaina
         DateTime m_currentTime;
         double m_lat;
         double m_lng;
+        double m_deltaLat = 0.003085;
+        double m_deltaLng = 0.003285;
 
         public bool ShowSatellite
         {
@@ -58,27 +60,39 @@ namespace Zaina
         {
             int newZoomLevel = m_currentZoomLevel + 1;
             if (newZoomLevel >= MinZoomLevel && newZoomLevel <= MaxZoomLevel)
+            {
                 m_currentZoomLevel = newZoomLevel;
+                m_deltaLat /= 2;
+                m_deltaLng /= 2;
+            }
         }
 
         public void ZoomOut()
         {
             int newZoomLevel = m_currentZoomLevel - 1;
             if (newZoomLevel >= MinZoomLevel && newZoomLevel <= MaxZoomLevel)
+            {
                 m_currentZoomLevel = newZoomLevel;
+                m_deltaLat *= 2;
+                m_deltaLng *= 2;
+            }
         }
 
         public void ShiftLeft()
         {
+            m_lng -= m_deltaLng;
         }
         public void ShiftRight()
         {
+            m_lng += m_deltaLng;
         }
         public void ShiftUp()
         {
+            m_lat += m_deltaLat; 
         }
         public void ShiftDown()
         {
+            m_lat -= m_deltaLat; 
         }
 
         public static string GetCacheDir()

@@ -47,22 +47,9 @@
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="meizusdk.core, Version=1.0.3910.30175, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\document\Managed Meizu SDK Wrapper 魅族SDK托管封装\demo\meizusdk.core.dll</HintPath>
-    </Reference>
-    <Reference Include="meizusdk.drawing, Version=1.0.3910.30170, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\document\Managed Meizu SDK Wrapper 魅族SDK托管封装\demo\meizusdk.drawing.dll</HintPath>
-    </Reference>
-    <Reference Include="meizusdk.license, Version=1.0.3910.30179, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\document\Managed Meizu SDK Wrapper 魅族SDK托管封装\demo\meizusdk.license.dll</HintPath>
-    </Reference>
-    <Reference Include="meizusdk.presentation, Version=1.0.3910.30186, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\document\Managed Meizu SDK Wrapper 魅族SDK托管封装\demo\meizusdk.presentation.dll</HintPath>
-    </Reference>
+    <Reference Include="meizusdk.core, Version=1.0.3944.39496, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="meizusdk.drawing, Version=1.0.3944.39495, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="meizusdk.presentation, Version=1.0.3944.39512, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="mscorlib" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
