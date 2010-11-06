@@ -336,6 +336,7 @@ namespace Zaina
         {
             WaitDialog.Begin(this);
             staticMap.ShiftLeft();
+            RegetAddress(staticMap.Lat, staticMap.Lng);
             ThreadPool.QueueUserWorkItem(new WaitCallback(MultithreadRebuildMap), autoEvent);
             autoEvent.WaitOne(Timeout.Infinite, false);
             WaitDialog.End();
@@ -344,6 +345,7 @@ namespace Zaina
         {
             WaitDialog.Begin(this);
             staticMap.ShiftRight();
+            RegetAddress(staticMap.Lat, staticMap.Lng);
             ThreadPool.QueueUserWorkItem(new WaitCallback(MultithreadRebuildMap), autoEvent);
             autoEvent.WaitOne(Timeout.Infinite, false);
             WaitDialog.End();
@@ -352,6 +354,7 @@ namespace Zaina
         {
             WaitDialog.Begin(this);
             staticMap.ShiftUp();
+            RegetAddress(staticMap.Lat, staticMap.Lng);
             ThreadPool.QueueUserWorkItem(new WaitCallback(MultithreadRebuildMap), autoEvent);
             autoEvent.WaitOne(Timeout.Infinite, false);
             WaitDialog.End();
@@ -360,6 +363,7 @@ namespace Zaina
         {
             WaitDialog.Begin(this);
             staticMap.ShiftDown();
+            RegetAddress(staticMap.Lat, staticMap.Lng);
             ThreadPool.QueueUserWorkItem(new WaitCallback(MultithreadRebuildMap), autoEvent);
             autoEvent.WaitOne(Timeout.Infinite, false);
             WaitDialog.End();
@@ -368,6 +372,17 @@ namespace Zaina
         private void SendSMSMessage()
         {
             Telephony.SendSMSMessage("", Address);
+        }
+
+        private void RegetAddress(double lat, double lng)
+        {
+            string address;
+            if (!GetAddress(lat, lng, out address))
+            {
+                MessageBox.Show(L10n.GetAddressFailed);
+                return;
+            }
+            Address = address;
         }
 
         private void MultithreadLocate(object stateInfo)

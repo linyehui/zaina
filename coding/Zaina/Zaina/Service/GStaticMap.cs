@@ -16,17 +16,31 @@ namespace Zaina
         bool HasInit = false;
         int m_currentZoomLevel = DefaultZoomLevel;
         DateTime m_currentTime;
+
         double m_lat;
         double m_lng;
         double m_deltaLat = 0.003085;
         double m_deltaLng = 0.003285;
 
+        public double Lat
+        {
+            get
+            {
+                return m_lat;
+            }
+        }
+        public double Lng
+        {
+            get
+            {
+                return m_lng;
+            }
+        }
         public bool ShowSatellite
         {
             get;set;
         }
 
-        
         public GStaticMap()
         {
             m_currentTime = System.DateTime.Now;
