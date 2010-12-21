@@ -83,6 +83,8 @@ namespace Zaina
             list.Items.Add(itemLocate);
             ListItem itemHistory = new ListItem(L10n.BtnHistory, null);
             list.Items.Add(itemHistory);
+            ListItem itemLeaveMsg = new ListItem(L10n.BtnLeaveMsg, null);
+            list.Items.Add(itemLeaveMsg);
        }
 
         void UsbConnection_StatusChanged(object sender, UsbConnectionEventArgs e)
@@ -90,7 +92,12 @@ namespace Zaina
             if (e.Status == UsbConnectionStatus.MassStorage)
             {
                 AnimationOut = AnimationType.ZoomOut;
-                Application.Exit();
+                
+                // 实在是没辙啊，估计是SDK的问题，导致USB退出时可能出现的crash
+                // 这么做之后能减少出现的概率，本质上的解决估计还要从SDK上着手
+                // edit by linyehui 2010/12/14 20:22
+                //Application.Exit();
+                System.Diagnostics.Process.GetCurrentProcess().Kill();
             }
         }
 
@@ -170,6 +177,11 @@ namespace Zaina
             {
                 HistoryWindow history = new HistoryWindow();
                 history.ShowDialog(this);
+            }
+            else if (item.Text == L10n.BtnLeaveMsg)
+            {
+                WeiboWindow wDlg = new WeiboWindow(L10n.LeaveMsgToLYH);
+                wDlg.ShowDialog(this);
             }
         }
     }

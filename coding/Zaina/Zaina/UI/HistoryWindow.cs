@@ -110,7 +110,7 @@ namespace Zaina
                 case Define.LocateGridMenuId_MapType:
                     //SwitchMapType();
                     break;
-                case Define.LocateGridMenuId_SendSMS:
+                case Define.LocateGridMenuId_UpdateWeibo:
                     break;
                 default:
                     break;
@@ -237,7 +237,7 @@ namespace Zaina
                     list.Items.Clear();
                 }
 
-                History history = new History();
+                Options history = new Options();
                 List<LocationItem> listHistory = history.GetHistory(-1);
                 foreach (LocationItem item in listHistory)
                 {
@@ -278,7 +278,7 @@ namespace Zaina
                     list.Items.Clear();
                 }
 
-                History history = new History();
+                Options history = new Options();
                 history.Clear();
 
                 DeleteCachesFile();

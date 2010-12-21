@@ -8,10 +8,15 @@ namespace Zaina
     class Define
     {
         public const int BannerHeight = 133;
+
+        public const int WeiboLogoWidth = 168;
+        public const int WeiboLogoHeight = 68;
+
         public const string BannerPath = @"skin\banner.png";
         public const string DefaultMapPath = @"skin\default_map.png";
         public const string AddressTitlePath = @"skin\address_title.png";
         public const string AboutDetailPath = @"skin\about.png";
+        public const string WeiboLogoPath = @"skin\weibo_logo.png";
 
         public const string ZoomInPath = @"skin\zoom_in.png";
         public const string ZoomOutPath = @"skin\zoom_out.png";
@@ -63,7 +68,7 @@ namespace Zaina
         public const int LocateGridMenuId_ZoomIn = LocateGridMenuIdBase + 1;
         public const int LocateGridMenuId_ZoomOut = LocateGridMenuIdBase + 2;
         public const int LocateGridMenuId_MapType = LocateGridMenuIdBase + 3;
-        public const int LocateGridMenuId_SendSMS = LocateGridMenuIdBase + 4;
+        public const int LocateGridMenuId_UpdateWeibo = LocateGridMenuIdBase + 4;
         
         public const int LocateGridMenuId_ShiftLeft = LocateGridMenuIdBase + 5;
         public const int LocateGridMenuId_ShiftRight = LocateGridMenuIdBase + 6;

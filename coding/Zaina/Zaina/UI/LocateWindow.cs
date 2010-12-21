@@ -19,6 +19,8 @@ namespace Zaina
         ToolBar toolbar = new ToolBar();
         PictureBox picBoxMap = new PictureBox();
         PictureBox picBoxCaption = new PictureBox();
+        ToucherHelper touchHelper = new ToucherHelper();
+
         GStaticMap staticMap = new GStaticMap();
         string Address = "";
         double Lat = 0;
@@ -51,9 +53,9 @@ namespace Zaina
             if (lat == 0 || lng == 0 || address.Length <= 0)
                 return false;
 
+            Address = address;
             Lat = lat;
             Lng = lng;
-            Address = address;
             HistoryView = true;
 
             return true;
@@ -84,6 +86,10 @@ namespace Zaina
 
             toolbar.ButtonClick += new EventHandler<ToolBar.ButtonEventArgs>(toolbar_ButtonClick);
             Controls.Add(toolbar);
+
+            touchHelper.TouchGestureEvent += new EventHandler<ToucherHelper.TouchHelperEventArgs>(OnGesture);
+
+            this.Touch += new EventHandler<MultiTouchEventArgs>(MultiTouchWindow_Touch);
 
             base.OnLoad(e);
 
@@ -160,6 +166,55 @@ namespace Zaina
             }
         }
 
+        void OnGesture(object sender, ToucherHelper.TouchHelperEventArgs e)
+        {
+            switch (e.Gesture)
+            {
+                // 这里是拖着地图走，所以对应的移动方向是反的
+                case ToucherHelper.TouchGesture.None:
+                    break;
+                case ToucherHelper.TouchGesture.Left:
+                    ShiftRight();
+                    break;
+                case ToucherHelper.TouchGesture.Right:
+                    ShiftLeft();
+                    break;
+                case ToucherHelper.TouchGesture.Up:
+                    ShiftDown();
+                    break;
+                case ToucherHelper.TouchGesture.Down:
+                    ShiftUp();
+                    break;
+                case ToucherHelper.TouchGesture.ZoomIn:
+                    ZoomIn();
+                    break;
+                case ToucherHelper.TouchGesture.ZoomOut:
+                    ZoomOut();
+                    break;
+            }
+        }
+
+        void MultiTouchWindow_Touch(object sender, Form.MultiTouchEventArgs e)
+        {
+            if (e.Touches.Count > 0)
+            {
+                string msg = String.Format("Touch X: {0}, Y: {1}, Z: {2}", e.Touches[0].X.ToString(), e.Touches[0].Y.ToString(), e.Touches[0].Z.ToString());
+                Debug.WriteLine(msg);
+                touchHelper.Add(e.Touches[0]);
+            }
+
+            if (e.Touches.Count > 1)
+            {
+                string msg1 = String.Format("Touch1 X: {0}, Y: {1}, Z: {2}", e.Touches[0].X.ToString(), e.Touches[0].Y.ToString(), e.Touches[0].Z.ToString());
+                string msg2 = String.Format("Touch2 X: {0}, Y: {1}, Z: {2}", e.Touches[1].X.ToString(), e.Touches[1].Y.ToString(), e.Touches[1].Z.ToString());
+
+                Debug.WriteLine(msg1);
+                Debug.WriteLine(msg2);
+
+                touchHelper.Add(e.Touches[0], e.Touches[1]);
+            }
+        }
+
         protected override void OnMzCommand(uint wParam, uint lParam)
         {
             int id = (int)NativeMethods.LOWORD(wParam);
@@ -179,8 +234,8 @@ namespace Zaina
                 case Define.LocateGridMenuId_MapType:
                     SwitchMapType();
                     break;
-                case Define.LocateGridMenuId_SendSMS:
-                    SendSMSMessage();
+                case Define.LocateGridMenuId_UpdateWeibo:
+                    UpdateWeibo();
                     break;
                 case Define.LocateGridMenuId_ShiftLeft:
                     ShiftLeft();
@@ -282,7 +337,7 @@ namespace Zaina
                 item = new GridMenuItem(Define.LocateGridMenuId_MapType, L10n.Satellite, imgMapType, imgMapType);
             menu.Items.Add(item);
 
-            item = new GridMenuItem(Define.LocateGridMenuId_SendSMS, L10n.SendSMS, imgSMS, imgSMS);
+            item = new GridMenuItem(Define.LocateGridMenuId_UpdateWeibo, L10n.Weibo, imgSMS, imgSMS);
             menu.Items.Add(item);
 
             Controls.Add(menu);
@@ -325,7 +380,8 @@ namespace Zaina
         private void SwitchMapType()
         {
             WaitDialog.Begin(this);
-            staticMap.ShowSatellite = !staticMap.ShowSatellite;
+            staticMap.SwitchMapType();
+
             BuildGridMenu();
             ThreadPool.QueueUserWorkItem(new WaitCallback(MultithreadRebuildMap), autoEvent);
             autoEvent.WaitOne(Timeout.Infinite, false);
@@ -369,9 +425,11 @@ namespace Zaina
             WaitDialog.End();
         }
 
-        private void SendSMSMessage()
+        private void UpdateWeibo()
         {
-            Telephony.SendSMSMessage("", Address);
+            string msg = String.Format(L10n.WeiboFormat, Lat.ToString(), Lng.ToString());
+            WeiboWindow wDlg = new WeiboWindow(msg);
+            wDlg.ShowDialog(this);
         }
 
         private void RegetAddress(double lat, double lng)
@@ -383,6 +441,8 @@ namespace Zaina
                 return;
             }
             Address = address;
+            Lat = lat;
+            Lng = lng;
         }
 
         private void MultithreadLocate(object stateInfo)
@@ -406,9 +466,11 @@ namespace Zaina
                 }
 
                 Address = address;
+                Lat = lat;
+                Lng = lng;
                 toolbar.EnableButton(ToolBarButtonIndex.MiddleTextButton, true);
 
-                History trackMan = new History();
+                Options trackMan = new Options();
                 trackMan.Add(System.DateTime.Now, lat, lng, address);
 
                 string mapFileName = staticMap.GenMap(lat, lng);

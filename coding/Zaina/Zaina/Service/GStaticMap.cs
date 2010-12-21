@@ -44,6 +44,8 @@ namespace Zaina
         public GStaticMap()
         {
             m_currentTime = System.DateTime.Now;
+            Options options = new Options();
+            ShowSatellite = options.GetIsShowStatellite();
         }
 
         public string GenMap(double lat, double lng)
@@ -68,6 +70,13 @@ namespace Zaina
                 return fileName;
             else
                 return DownloadMap(url, fileName);
+        }
+
+        public void SwitchMapType()
+        {
+            ShowSatellite = !ShowSatellite;
+            Options options = new Options();
+            options.SetIsShowStatellite(ShowSatellite);
         }
 
         public void ZoomIn()

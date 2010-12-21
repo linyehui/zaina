@@ -47,13 +47,21 @@
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="meizusdk.core, Version=1.0.3944.39496, Culture=neutral, processorArchitecture=MSIL" />
-    <Reference Include="meizusdk.drawing, Version=1.0.3944.39495, Culture=neutral, processorArchitecture=MSIL" />
-    <Reference Include="meizusdk.presentation, Version=1.0.3944.39512, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="meizusdk.core, Version=1.0.3944.39496, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>bin\Debug\MeizuSDK.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="meizusdk.drawing, Version=1.0.3944.39495, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>bin\Debug\meizusdk.drawing.dll</HintPath>
+    </Reference>
+    <Reference Include="meizusdk.presentation, Version=1.0.3944.39512, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>bin\Debug\meizusdk.presentation.dll</HintPath>
+    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.SQLite, Version=1.0.66.0, Culture=neutral, PublicKeyToken=1fdb50b1b62b4c84, processorArchitecture=MSIL" />
+    <Reference Include="System.Data.SQLite, Version=1.0.66.0, Culture=neutral, PublicKeyToken=1fdb50b1b62b4c84, processorArchitecture=MSIL">
+      <HintPath>bin\Debug\System.Data.SQLite.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
@@ -62,15 +70,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Service\AppKey.cs" />
     <Compile Include="Service\Downloader.cs" />
     <Compile Include="Service\Geolocation.cs" />
     <Compile Include="Service\GStaticMap.cs" />
-    <Compile Include="Service\History.cs" />
+    <Compile Include="Service\Options.cs" />
     <Compile Include="Service\LocationItem.cs" />
     <Compile Include="Service\M8Helper.cs" />
     <Compile Include="Service\RIL.cs" />
+    <Compile Include="Service\Weibo.cs" />
     <Compile Include="Service\SQLiteQueryBrowser.cs" />
     <Compile Include="UI\AboutWindow.cs" />
+    <Compile Include="UI\ConfigWindow.cs" />
+    <Compile Include="UI\TouchHelper.cs" />
+    <Compile Include="UI\WeiboWindow.cs" />
     <Compile Include="UI\define.cs" />
     <Compile Include="UI\HistoryWindow.cs" />
     <Compile Include="UI\l10n.cs" />

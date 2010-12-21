@@ -1,0 +1,11 @@
+E:\codeplex\zaina\coding\Zaina\Zaina\obj\Release\ResolveAssemblyReference.cache
+E:\codeplex\zaina\coding\Zaina\Zaina\obj\Release\Zaina.Properties.Resources.resources
+E:\codeplex\zaina\coding\Zaina\Zaina\obj\Release\Zaina.csproj.GenerateResource.Cache
+E:\codeplex\zaina\coding\Zaina\Zaina\bin\Release\Zaina.exe
+E:\codeplex\zaina\coding\Zaina\Zaina\bin\Release\Zaina.pdb
+E:\codeplex\zaina\coding\Zaina\Zaina\bin\Release\MeizuSDK.Core.dll
+E:\codeplex\zaina\coding\Zaina\Zaina\bin\Release\meizusdk.drawing.dll
+E:\codeplex\zaina\coding\Zaina\Zaina\bin\Release\meizusdk.presentation.dll
+E:\codeplex\zaina\coding\Zaina\Zaina\bin\Release\System.Data.SQLite.dll
+E:\codeplex\zaina\coding\Zaina\Zaina\obj\Release\Zaina.exe
+E:\codeplex\zaina\coding\Zaina\Zaina\obj\Release\Zaina.pdb
