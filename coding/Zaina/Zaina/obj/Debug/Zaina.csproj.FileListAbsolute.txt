@@ -1,7 +1,0 @@
-E:\codeplex\zaina\coding\Zaina\Zaina\obj\Debug\ResolveAssemblyReference.cache
-E:\codeplex\zaina\coding\Zaina\Zaina\obj\Debug\Zaina.Properties.Resources.resources
-E:\codeplex\zaina\coding\Zaina\Zaina\obj\Debug\Zaina.csproj.GenerateResource.Cache
-E:\codeplex\zaina\coding\Zaina\Zaina\bin\Debug\Zaina.exe
-E:\codeplex\zaina\coding\Zaina\Zaina\bin\Debug\Zaina.pdb
-E:\codeplex\zaina\coding\Zaina\Zaina\obj\Debug\Zaina.exe
-E:\codeplex\zaina\coding\Zaina\Zaina\obj\Debug\Zaina.pdb
